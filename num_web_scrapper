@@ -1,0 +1,59 @@
+import phonenumbers
+import re
+import pyperclip
+
+emailRegex =re.compile(r'''(
+    [a-zA-Z0-9._%+-]+       # username
+    @                       # @ symbol
+    [a-zA-Z0-9.-]+          # domail name
+    (\.[a-zA-Z]{2,4})       # dot-something
+)''', re.VERBOSE)
+
+# User Inputs Text and Operation wished to be performrd
+print("""What fuction would you like to perform
+                       1. Find Phone Number In Text
+                       2. Find E-mail in Text
+                       3. Find Phone Number and E-mail in Text
+                       """)
+func_input = int(input("Enter a number: "))
+matches = []
+
+if func_input == 1:
+    text_input = str(pyperclip.paste())
+    for match in phonenumbers.PhoneNumberMatcher(text_input, "NG"):
+            print(phonenumbers.format_number(match.number, phonenumbers.PhoneNumberFormat.E164))
+
+if func_input == 2:
+    text_input = str(pyperclip.paste())
+    # Find matches in mail
+    for groups in emailRegex.findall(text_input):
+        matches.append(groups[0])
+# Copy results to the clipboard.
+    if len(matches) > 0:
+        text_input.join('\n'.join(matches))
+        print('\n'.join(matches))
+    else:
+        print('No email addresses found.')
+        
+        
+        
+if func_input == 3:
+    text_input = str(pyperclip.paste())
+    # Find matches in numbers
+    for match in phonenumbers.PhoneNumberMatcher(text_input, "NG"):
+        print(phonenumbers.format_number(match.number, phonenumbers.PhoneNumberFormat.E164))
+    # Find matches in mail
+    for groups in emailRegex.findall(text_input):
+        matches.append(groups[0])
+    # Prints out E-mail
+    if len(matches) > 0:
+        text_input.join('\n'.join(matches))
+        print('\n'.join(matches))
+    else:
+        print('No email addresses found.')
+    # Prints out PhoneNumber
+   
+        
+"""
+hello my name is Samuel and i wrote the program for this code thanks.
+"""
